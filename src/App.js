@@ -10,10 +10,13 @@ function Message(props) {
     )
 }
 
-function Messages(props) {
+function Messages() {
+    const messages = [
+        { sender: "Larry", date: "9/4/20", content: "Hello!" }
+    ]
     return (
         <div className="messages">
-            { props.messages.map((message) => <Message 
+            { messages.map((message) => <Message 
                 sender={message.sender}
                 date={message.date}
                 content={message.content}
@@ -22,7 +25,7 @@ function Messages(props) {
     )
 }
 
-function Inputs(props) {
+function Inputs() {
     return (
         <div className="inputs">
             <div className="inputs__group">
@@ -42,9 +45,7 @@ function App() {
     return (
         <div className="app">
             <h1>AET Chat</h1>
-            <Messages messages={[
-                { sender: "Larry", date: "9/4/20", content: "Hello!" }
-            ]} />
+            <Messages/>
             <Inputs />
         </div>
     )

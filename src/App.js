@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { collection, onSnapshot } from "firebase/firestore"
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore"
 import { db } from "./firebase"
 import Messages from "./Messages"
 import Inputs from "./Inputs"
@@ -10,7 +10,8 @@ function App() {
     const [ messages, setMessages ] = useState([])
 
     useEffect(() => {
-        const unsubscribe = onSnapshot(collection(db, "messages"), (snapshot) => {
+        const messagesByDate = query(collection(db, "messages"), orderBy("date", "asc"))
+        const unsubscribe = onSnapshot(messagesByDate, (snapshot) => {
             snapshot.docChanges().forEach((change) => {
                 if (change.type === "added") {
                     setMessages(messages => {
@@ -21,12 +22,15 @@ function App() {
                 }
             })
         })
-        return () => unsubscribe()
+        return () => {
+            setMessages([])
+            unsubscribe()
+        }
     }, [])
 
     return (
         <div className="app">
-            <h1>AET Chat</h1>
+            <h1>AET Chats</h1>
             <Messages messages={messages} />
             <Inputs />
         </div>
